@@ -1,0 +1,6 @@
+{
+    "localdbURI":"mongodb://localhost/bidding",
+    "mlabdbURI":"",
+    "secureKey":"saiseetharamaiahnodejsprojects",
+    "sessionKey":"saiseetharamaiahsessionsecreats"
+}
