@@ -1,0 +1,30 @@
+<div id="concerns">
+  <lable>Concern :</lable> <h2 id="title">concern</h2> 
+    Registered User: {{user}}<br>
+    <ul>
+        {{#each arr}}
+        <li>{{@index}}: {{this.doctor}}:<a href="/getconcern">check status </a></li>
+        {{/each}}
+    </ul>
+
+    <form action="/placebid" method="POST">
+        <input type="number" name="bid" value="place a bid">
+        <input type="submit" name="submit" value="submit">
+    </form>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js">
+/*let socket = io('http://localhost:4200/doctor',{path:'/doctor/:'+{{id}},'transports': ['websocket', 'polling']});
+socket.on('connection',()=>{
+   console.log('connection to conernroom with id:',{{id}});
+socket.emit('getconcern',{{id}});
+});
+socket.on('concern',(concern)=>{
+    let h= document.getElementById('title');
+    let title= document.createTextNode(concern.title);
+    h.appendChild(title);
+});*/
+
+
+
+
+</script>

@@ -54,4 +54,9 @@ let addNewConcern=  async function(body,user){
 
 }
 
+let getAll= async function(query){
+    return await concern.find({},'_id title description');
+}
+
 exports.addNewConcern = addNewConcern;
+exports.getAll=getAll;

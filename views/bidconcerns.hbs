@@ -1,0 +1,43 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js"></script>
+<script>
+    let arr;
+  const socket = io('http://localhost:4200/doctor',{path:'/doctor','transports': ['websocket', 'polling']});
+  socket.on('connection',(socket)=>{
+      console.log('connected',socket.nameSpace);
+  })
+      socket.on('concerns',(concernarr)=>{
+          console.log('got concerns array', concernarr);
+          if(concernarr){ 
+          var list = document.getElementById('list');
+          for(i=0;i<=concernarr.length;i++){
+              let concern=concernarr[i];
+             let textnode = document.createTextNode(`${i}      ${concern.title}             ${concern.description}`);
+             let li = document.createElement("LI");
+             let a = document.createElement("A");
+             a.setAttribute('href', 'http://localhost:4200/doctor/'+concern._id);
+             a.appendChild(textnode);
+             li.appendChild(a);
+                document.getElementById("list").appendChild(li);
+
+      }   };
+  });
+  
+  
+  
+</script>
+
+
+<div id="concerns">
+    Concern name : {{name}} <br>
+    Registered User: {{user}}<br>
+    <ul id='list'>
+        {{#each arr}}
+        
+        {{/each}}
+    </ul>
+
+    <form action="/placebid" method="POST">
+        <input type="number" name="bid" value="place a bid">
+        <input type="submit" name="submit" value="submit">
+    </form>
+</div>

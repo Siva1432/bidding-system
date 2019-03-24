@@ -1,15 +1,21 @@
 const express=  require('express');
 const app=express();
 const server=require('http').createServer(app);
-const io= require('socket.io')(server);
+const doctorio= require('socket.io').listen(server,{
+  path:'/doctor','transports': ['websocket', 'polling']
+});
+const concernio= require('socket.io').listen(server,{
+  path:'/concern'
+});
 const bp=require('body-parser');
 const port= process.env.PORT;
 const hbs = require('express-handlebars');
-const handlebars= require('handlebars');
-const {usersRouter}= require('./user_router.js');
+const usersRouter= require('./routing/user_router.js')();
+const concernRouter= require('./routing/concerns_routing.js')(concernio);
+const doctorsRouter= require('./routing/doctors_routing.js')(doctorio);
 const session= require('express-session');
 const config= require('./config.json');
-const cp= require('cookie-parser');
+
 
 //app.use(cp.JSONCookie);
 
@@ -24,12 +30,20 @@ app.use(session({
     saveUninitialized: false,
     cookie: { path: '/',secure:false,maxAge:  1800000 },    
   }));
+
+
 app.use(bp.json());
 app.use(bp.urlencoded({extended:true}));
 app.use('/users',usersRouter);
+app.use('/concern',concernRouter);
+app.use('/doctor',doctorsRouter);
+// let socket=io.on('connection',(socket)=>{
+//   console.log('new users connected',socket.client);
+// });
 
 server.listen(port || 4500,()=>{
-    console.log(`server listening on port ${port ? port : 4500} ` );
+  console.log(`server listening on port ${port ? port : 4500} ` );
 });
 
-exports.io=io;
+
+
