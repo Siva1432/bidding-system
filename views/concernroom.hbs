@@ -1,3 +1,5 @@
+
+
 <div id="concerns">
   <lable>Concern :</lable> <h2 id="title">concern</h2> 
     Registered User: {{user}}<br>
@@ -12,18 +14,20 @@
         <input type="submit" name="submit" value="submit">
     </form>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js">
-/*let socket = io('http://localhost:4200/doctor',{path:'/doctor/:'+{{id}},'transports': ['websocket', 'polling']});
-socket.on('connection',()=>{
-   console.log('connection to conernroom with id:',{{id}});
-socket.emit('getconcern',{{id}});
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js"></script>
+<script>
+    let id={{id}};
+    
+    const socket = io('http://localhost:4200/room',{transports: ['websocket']});
+socket.on('connection',(socket)=>{
+   console.log('connection to conernroom with id:',socket,id);
 });
-socket.on('concern',(concern)=>{
+socket.emit('getconcern',id);
+ socket.on('concern',(concern)=>{
     let h= document.getElementById('title');
     let title= document.createTextNode(concern.title);
     h.appendChild(title);
-});*/
-
+});
 
 
 

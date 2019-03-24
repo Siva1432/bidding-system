@@ -27,37 +27,38 @@ module.exports=function(io){
         
         
     });
-// if(roomId){
-//     io
-//     .of(`/${roomId}`)
-//     .on('connection',(socket)=>{
-//         socket.on('getconcern',async (id)=>{
-//             const getconcern= await findConcern(id);
-//             if(!getconcern) socket.emit('no concern');
-//             else{
-//                 console.log(`sending concer with id :${id}`);
-//                 socket.emit('concern',getconcern);
-//             }
-
-//         });
-//     })
-// }
-
-    // router.post('/',authorize,async(req,res,next)=>{
-    // console.log('posting new concern');   
-    // let concern = await addNewConcern(req.body,req.session.user)
-    // if(!concern) {console.log('failed to add concern'),res.redirect('/concern');}
-    // else{
-    //     console.log('broadcasting new concern');
+    io
+    .of('/room')
+    .on('connection',async (socket)=>{
+        console.log(`new user connected to rooms`);
         
-    //    if(await socket) socket.broadcast.emit('new concern added',concern);
-    //     res.redirect('/bids');
-    // }
-    // });
-    router.get('/:id',async (req,res,next)=>{
+            socket.on('getconcern',async(id)=>{
+                console.log(`sending concer with id :${roomId}`);
+            const getconcern= await findConcern(roomId);
+            if(!getconcern) socket.emit('no concern');
+            else{
+                console.log(`sending concer with id :${id}`);
+                socket.emit('concern',getconcern);
+            }
+            });
+    });
+
+
+    router.post('/',authorize,async(req,res,next)=>{
+    console.log('posting new concern');   
+    let concern = await addNewConcern(req.body,req.session.user)
+    if(!concern) {console.log('failed to add concern'),res.redirect('/concern');}
+    else{
+        console.log('broadcasting new concern');
+        
+       if(await socket) socket.broadcast.emit('new concern added',concern);
+        res.redirect('/bids');
+    }
+    });
+    router.get('/:id',async function (req,res,next){
        
         const id=req.params.id;
-        roomId=id;
+        this.roomId=id;
         console.log('rendering the concernroom with id:',id);
         res.render('concernroom',{id:id});
     })

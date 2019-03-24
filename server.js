@@ -1,9 +1,8 @@
 const express=  require('express');
 const app=express();
 const server=require('http').createServer(app);
-const doctorio= require('socket.io').listen(server,{
-  path:'/doctor','transports': ['websocket', 'polling']
-});
+const doctorio= require('socket.io').listen(server);
+doctorio.set('transports',['websocket']);
 const concernio= require('socket.io').listen(server,{
   path:'/concern'
 });

@@ -1,6 +1,6 @@
 {
     "localdbURI":"mongodb://localhost/bidding",
-    "mlabdbURI":"",
+    "mlabdbURI":"mongodb://sai222:sivasai222@ds249707.mlab.com:49707/bidding",
     "secureKey":"saiseetharamaiahnodejsprojects",
     "sessionKey":"saiseetharamaiahsessionsecreats"
 }
