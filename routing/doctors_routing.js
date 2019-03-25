@@ -48,9 +48,9 @@ module.exports=function(io){
             console.log('adding new bid',bid);
             const result=await addNewBid(bid);
             console.log('result of addNewBid',result);
-            if(result.bids.length>0){
-                socket.emit('newbidadded',result.bids[result.bids.length-1]);
-                socket.broadcast.emit('newbidadded',result.bids[result.bids.length-1])
+            if(result.updatedConcern.bids.length>0){
+                socket.emit('newbidadded',{bid:result.updatedConcern.bids[result.index],index:result.index});
+                socket.broadcast.emit('newbidadded',{bid:result.updatedConcern.bids[result.index],index:result.index})
                 console.log('new bid added socket emitted');
             }
         })

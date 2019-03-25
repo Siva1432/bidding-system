@@ -74,19 +74,50 @@ let addNewBid=async function(bid){
             doctor:doctor,
             notes:bid.notes
         };
+        
         let changeConcern= await concern.findById(bid.id);
-        changeConcern.bids.push(bidObj);
+        
+        let index= iterativeFunction(changeConcern.bids, bid.price);
+        changeConcern.bids.splice(index,0,bidObj)
         //console.log('updating the concern with roomId',changeConcern);
         let updatedConcern= await concern.findByIdAndUpdate(bid.id,{$set:{bids:changeConcern.bids}},{new:true});
-        let updatedBidsArr=[];
+    
         if(await updatedConcern){
             console.log('updatedconcern  ::',updatedConcern);
-            return updatedConcern;
+            return {updatedConcern,index};
         }
     }catch(err){
         console.log('error while adding new bid',err);
     }
     }
+
+    let iterativeFunction = function (arr, x) { 
+   
+        let start=0, end=arr.length-1; 
+              
+        // Iterate while start not meets end 
+        while (start<=end){ 
+      
+            // Find the mid index 
+            let mid=Math.floor((start + end)/2); 
+            // console.log(arr[mid]+"  "+(arr[mid]-2)+"   "+(arr[mid]+2)+"  "+x);
+            // If element is present at mid, return True 
+            if (x>=(arr[mid].price-2) && x<=(arr[mid].price+2) )return -1;
+            // Else look in left or right half accordingly 
+        else if (x>(arr[mid].price+2))  
+        start = mid + 1; 
+   else if(x<(arr[mid].price-2))
+        end = mid - 1; 
+   
+} 
+
+ return start;
+
+
+} 
+
+
+
 let findConcern = async function(id){
     return await concern.findById(id).populate('postedBy','username role gender');;
 }

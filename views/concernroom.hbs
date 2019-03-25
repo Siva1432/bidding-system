@@ -16,16 +16,37 @@
 <script>
     let id='{{id}}';
    
-  
+    let bidsArry=[];
+    let bidslist= document.getElementById('bids');
+    let appendList=function(){
+ if(bidsArry.length >0 ){
+     bidslist.innerHTML='';
+    for(let bid of bidsArry){
+        let li = document.createElement('LI');
+        let text= document.createTextNode(`${bid.doctor.username} ::${bid.notes}:: ${bid.price}`)
+        li.appendChild(text);
+        bidslist.appendChild(li);
+    };
+    }
+    else{
+       let li = document.createElement('LI');
+        let text= document.createTextNode(`No bids Yet`)
+        li.appendChild(text);
+        bidslist.appendChild(li);
+    }
+
+}
     let socket= io('http://localhost:4200/room',{transports: ['polling','websocket']});
 socket.on('connect',(s)=>{
    console.log(`connection to conernroom with id: `);
 });
-let bidslist= document.getElementById('bids');
+
+
+
 //socket.open();
 socket.emit('getconcern',id);
  socket.on('concern',(concern)=>{
-     
+     bidsArry=concern.bids;
      console.log(`connection to conernroom with id:`,concern);
     let titleh= document.getElementById('title');
     let title= document.createTextNode(concern.title);
@@ -41,22 +62,7 @@ socket.emit('getconcern',id);
     let name= document.createTextNode(concern.postedBy.username);
     postedby.appendChild(name);
 
-    
-    if(concern.bids.length >0 ){
-    for(let bid of concern.bids){
-        let li = document.createElement('LI');
-        let text= document.createTextNode(`${bid.doctor.username} ::${bid.notes}:: ${bid.price}`)
-        li.appendChild(text);
-        bidslist.appendChild(li);
-    };
-    }
-    else{
-       let li = document.createElement('LI');
-        let text= document.createTextNode(`No bids Yet`)
-        li.appendChild(text);
-        bidslist.appendChild(li);
-    }
-
+appendList();
 });
 
 const placebid = function(){
@@ -71,12 +77,18 @@ console.log(`socketd emitted newbid`);
 }
 
 
-socket.on('newbidadded',(bid)=>{
-    console.log('new bid arrived',bid);
-        let newli = document.createElement('LI');
-        let newtext= document.createTextNode(`${bid.doctor.username} :::${bid.notes}:::: ${bid.price}`)
+socket.on('newbidadded',(bidObj)=>{
+    console.log('new bid arrived',bidObj);
+    
+    if(bidObj.index >= 0 ){
+        bidsArry.splice(bidObj.index,0,bidObj.bid);
+    }
+        /*let newli = document.createElement('LI');
+        let newtext= document.createTextNode(`${bidObj.bid.doctor.username} :::${bidObj.bid.notes}:::: ${bidObj.bid.price}`)
         newli.appendChild(newtext);
-        bidslist.appendChild(newli);
+        bidslist.appendChild(newli);*/
+        console.log(`calling appendList in newbidadded`,bidsArry);
+        appendList();
     
 });
 
