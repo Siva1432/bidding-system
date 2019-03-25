@@ -1,5 +1,5 @@
 const express = require('express');
-const {getAll,findConcern}= require('../concern_queries');
+const {addNewConcern,getAll,findConcern,addNewBid}= require('../database/concern_queries');
 const router = express.Router();
 const authorize= require('./middlewares/authorize');
 
@@ -38,7 +38,7 @@ module.exports=function(io){
             if(!getconcern) socket.emit('no concern');
             else{
                 console.log(`sending concer with id :${id}`);
-                socket.emit('concern',await getconcern);
+                io.emit('concern',await getconcern);
             }
             });
 
@@ -46,22 +46,18 @@ module.exports=function(io){
         //get newbids------------
         socket.on('newbid',async function(bid){
             console.log('adding new bid',bid);
-            
+            const result=await addNewBid(bid);
+            console.log('result of addNewBid',result);
+            if(result.bids.length>0){
+                socket.emit('newbidadded',result.bids);
+                socket.broadcast.emit('newbidadded',result.bids[result.bids.length-1])
+                console.log('new bid added socket emitted');
+            }
         })
     });
 
 
-    router.post('/',authorize,async(req,res,next)=>{
-    console.log('posting new concern');   
-    let concern = await addNewConcern(req.body,req.session.user)
-    if(!concern) {console.log('failed to add concern'),res.redirect('/concern');}
-    else{
-        console.log('broadcasting new concern');
-        
-       if(await socket) socket.broadcast.emit('new concern added',concern);
-        res.redirect('/bids');
-    }
-    });
+    ;
     router.get('/:id',async function (req,res,next){
        
         const id=req.params.id;

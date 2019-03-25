@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { addNewUser,authenticateUser } = require('../user_queries');
+const { addNewUser,authenticateUser } = require('../database/user_queries');
 //const {addNewConcern} = require('../concern_queries');
 
 
@@ -33,8 +33,14 @@ module.exports=function(){
             }
          });
          req.session.user=authenticate;
-        if(req.session.user.role =='doctor') res.redirect('/doctor');
-           res.redirect('/concern');
+
+        try{
+            (req.session.user.role =='doctor') ? res.redirect('/doctor'): res.redirect('/concern');
+        }catch(err){
+            console.log('err redirection user');
+            throw err;
+        }
+        
        }
     });
     //login user-----------------------------------------------------------------------------
@@ -48,7 +54,7 @@ module.exports=function(){
                console.log(err);
             }
          });
-         req.session.user=result.user;
+         req.session.user=result.add;
          if(req.session.user.role =='doctor') res.redirect('/doctor');
     res.redirect('/concern')
     });

@@ -41,7 +41,7 @@ app.use('/doctor',doctorsRouter);
 //   console.log('new users connected',socket.client);
 // });
 
-server.listen(port || 4500,()=>{
+server.listen(port || 4200,()=>{
   console.log(`server listening on port ${port ? port : 4500} ` );
 });
 

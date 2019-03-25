@@ -102,3 +102,4 @@ let addNewUser=  async function(body){
 
 exports.addNewUser=addNewUser;
 exports.authenticateUser= authenticateUser;
+exports.userModel=User;
