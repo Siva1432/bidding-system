@@ -60,7 +60,7 @@ let getAll= async function(query){
 
 
 let findConcern = async function(id){
-    return await concern.findById(id);
+    return await concern.findById(id).populate('postedBy','username role gender');;
 }
 exports.addNewConcern = addNewConcern;
 exports.getAll=getAll;

@@ -2,16 +2,14 @@
 
 <div id="concerns">
   <lable>Concern :</lable> <h2 id="title">concern</h2> 
-    Registered User: {{user}}<br>
-    <ul>
-        {{#each arr}}
-        <li>{{@index}}: {{this.doctor}}:<a href="/getconcern">check status </a></li>
-        {{/each}}
-    </ul>
+  <lable>description :</lable> <p id="description">concern</p> 
+  <lable>Create BY :</lable> <h3 id="created-by"></h3> 
+  <lable>Bids  :</lable> <ul id="bids"></ul> 
 
-    <form action="/placebid" method="POST">
-        <input type="number" name="bid" value="place a bid">
-        <input type="submit" name="submit" value="submit">
+    <form id="bidForm"action="/placebid" method="POST">
+        <input type="number" requrie id='price' name="price" >
+        <input type="text" id='notes' name="notes" >
+        <input type="button" onclick="placebid()"  value="Place Bid">
     </form>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js"></script>
@@ -26,10 +24,48 @@ socket.on('connect',(s)=>{
 socket.open();
 socket.emit('getconcern',id);
  socket.on('concern',(concern)=>{
-    let h= document.getElementById('title');
+     console.log(`connection to conernroom with id:`,concern);
+    let titleh= document.getElementById('title');
     let title= document.createTextNode(concern.title);
-    h.appendChild(title);
+    titleh.appendChild(title);
+
+
+    let descriptionp= document.getElementById('description');
+    let description= document.createTextNode(concern.description);
+    descriptionp.appendChild(description);
+
+
+    let postedby= document.getElementById('created-by');
+    let name= document.createTextNode(concern.postedBy.username);
+    postedby.appendChild(name);
+
+    let bids= document.getElementById('bids');
+    if(concern.bids.length >0 ){
+    for(let bid of concern.bids){
+        let li = document.createElement('LI');
+        let text= document.createTextNode(`${bid.doctor} :::: ${bid.price}`)
+        li.appendChild(text);
+        bids.appendChild(li);
+    };
+    }
+    else{
+       let li = document.createElement('LI');
+        let text= document.createTextNode(`No bids Yet`)
+        li.appendChild(text);
+        bids.appendChild(li);
+    }
+
 });
+
+const placebid = function(){
+let price =document.getElementById('price').value;
+let notes =document.getElementById('notes').value;
+let doctorId='{{doctorId}}'
+console.log(`bid placed :$${price} by {{doctorId}} included notes ${notes}`)
+socket.emit('newbid',{price:price,doctorId:doctorId,notes:notes})
+console.log(`socketd emitted newbid`);
+
+}
 
 
 

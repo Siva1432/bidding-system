@@ -31,7 +31,7 @@ module.exports=function(io){
     .of('/room')
     .on('connection',async (socket)=>{
         console.log(`new user connected to rooms`);
-        
+        //send concerns to doctor --------------------------------
             socket.on('getconcern',async(id)=>{
                 console.log(`sending concer with id :${id}`);
             const getconcern= await findConcern(id);
@@ -41,6 +41,13 @@ module.exports=function(io){
                 socket.emit('concern',await getconcern);
             }
             });
+
+
+        //get newbids------------
+        socket.on('newbid',async function(bid){
+            console.log('adding new bid',bid);
+            
+        })
     });
 
 
@@ -60,7 +67,7 @@ module.exports=function(io){
         const id=req.params.id;
         this.roomId=id;
         console.log('rendering the concernroom with id:',id);
-        res.render('concernroom',{id:id});
+        res.render('concernroom',{id:id,doctorId:req.session.user._id});
     })
     router.get('/', authorize,async (req,res,next)=>{
         res.render('bidconcerns');       

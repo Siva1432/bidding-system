@@ -42,13 +42,13 @@ module.exports=function(){
     //signup new user-----------------------------------------------------------------------------
     router.post('/signup',async(req,res,next)=>{
         
-        const {message,user}= await addNewUser(req.body);
+        const result= await addNewUser(req.body);
         req.session.regenerate(function(err){
             if (err){
                console.log(err);
             }
          });
-         req.session.user=user;
+         req.session.user=result.user;
          if(req.session.user.role =='doctor') res.redirect('/doctor');
     res.redirect('/concern')
     });
