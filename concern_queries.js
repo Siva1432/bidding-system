@@ -58,5 +58,10 @@ let getAll= async function(query){
     return await concern.find({},'_id title description');
 }
 
+
+let findConcern = async function(id){
+    return await concern.findById(id);
+}
 exports.addNewConcern = addNewConcern;
 exports.getAll=getAll;
+exports.findConcern=findConcern;

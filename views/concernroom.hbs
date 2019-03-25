@@ -16,12 +16,14 @@
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js"></script>
 <script>
-    let id={{id}};
-    
-    const socket = io('http://localhost:4200/room',{transports: ['websocket']});
-socket.on('connection',(socket)=>{
-   console.log('connection to conernroom with id:',socket,id);
+    let id='{{id}}';
+   
+  
+    let socket= io('http://localhost:4200/room',{transports: ['polling','websocket']});
+socket.on('connect',(s)=>{
+   console.log(`connection to conernroom with id: `);
 });
+socket.open();
 socket.emit('getconcern',id);
  socket.on('concern',(concern)=>{
     let h= document.getElementById('title');

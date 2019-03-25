@@ -1,9 +1,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js"></script>
 <script>
     let arr;
-  const socket = io('http://localhost:4200/doctor',{transports:['websocket']});
+  const socket = io('http://localhost:4200/doctor',{transports:['polling','websocket']});
   socket.on('connection',(socket)=>{
-      console.log('connected',socket.nameSpace);
+      console.log('connect',socket.nameSpace);
   })
       socket.on('concerns',(concernarr)=>{
           console.log('got concerns array', concernarr);

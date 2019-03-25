@@ -33,12 +33,12 @@ module.exports=function(io){
         console.log(`new user connected to rooms`);
         
             socket.on('getconcern',async(id)=>{
-                console.log(`sending concer with id :${roomId}`);
-            const getconcern= await findConcern(roomId);
+                console.log(`sending concer with id :${id}`);
+            const getconcern= await findConcern(id);
             if(!getconcern) socket.emit('no concern');
             else{
                 console.log(`sending concer with id :${id}`);
-                socket.emit('concern',getconcern);
+                socket.emit('concern',await getconcern);
             }
             });
     });

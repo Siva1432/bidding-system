@@ -2,10 +2,11 @@ const express=  require('express');
 const app=express();
 const server=require('http').createServer(app);
 const doctorio= require('socket.io').listen(server);
-doctorio.set('transports',['websocket']);
+doctorio.set('transports',['polling','websocket']);
 const concernio= require('socket.io').listen(server,{
   path:'/concern'
 });
+
 const bp=require('body-parser');
 const port= process.env.PORT;
 const hbs = require('express-handlebars');
