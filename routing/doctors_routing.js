@@ -38,7 +38,7 @@ module.exports=function(io){
             if(!getconcern) socket.emit('no concern');
             else{
                 console.log(`sending concer with id :${id}`);
-                io.emit('concern',await getconcern);
+                socket.emit('concern',await getconcern);
             }
             });
 
@@ -49,7 +49,7 @@ module.exports=function(io){
             const result=await addNewBid(bid);
             console.log('result of addNewBid',result);
             if(result.bids.length>0){
-                socket.emit('newbidadded',result.bids);
+                socket.emit('newbidadded',result.bids[result.bids.length-1]);
                 socket.broadcast.emit('newbidadded',result.bids[result.bids.length-1])
                 console.log('new bid added socket emitted');
             }
